@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<co.moonmonkeylabs.flowmortarexampleapp.view.MainView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+  <Button
+      android:id="@+id/main_buttons_rotation_screen"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="Rotation Screen"
+      android:textAlignment="center"/>
+
+  <Button
+      android:id="@+id/main_buttons_photo_display_screen"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="Photo Picker Screen"
+      android:textAlignment="center"/>
+
+
+  <Button
+      android:id="@+id/main_buttons_settings_screen"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="Settings Screen"
+      android:textAlignment="center"/>
+
+  <Button
+      android:id="@+id/main_buttons_wizard_screen"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="Wizard Screen"
+      android:textAlignment="center"/>
+</co.moonmonkeylabs.flowmortarexampleapp.view.MainView>
