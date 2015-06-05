@@ -64,25 +64,7 @@ public class MainScreen extends Path {
     }
 
     public void handleSettingsScreenButtonClicked() {
-
-
       Flow.get(getView()).set(new SettingScreen());
-
-      Flow.get(getView()).setHistory(
-          History
-            .emptyBuilder()
-            .push(new SettingScreen())
-            .push(new RotationScreen())
-            .build(),
-          Flow.Direction.REPLACE);
-
-      Flow.get(getView()).setHistory(
-          History.single(new SettingScreen()),
-          Flow.Direction.FORWARD);
-
-      Flow.get(getView()).goBack();
-
-
     }
 
     public void handleWizardScreenButtonClicked() {
