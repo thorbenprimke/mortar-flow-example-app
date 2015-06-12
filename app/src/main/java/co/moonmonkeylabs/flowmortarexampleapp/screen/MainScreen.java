@@ -1,6 +1,7 @@
 package co.moonmonkeylabs.flowmortarexampleapp.screen;
 
 import android.app.Activity;
+import android.content.ContextWrapper;
 import android.os.Bundle;
 
 import javax.inject.Inject;
@@ -9,13 +10,11 @@ import javax.inject.Singleton;
 import co.moonmonkeylabs.flowmortarexampleapp.ActivityModule;
 import co.moonmonkeylabs.flowmortarexampleapp.FlowMortarExampleActivity;
 import co.moonmonkeylabs.flowmortarexampleapp.R;
-import co.moonmonkeylabs.flowmortarexampleapp.common.actionbar.ActionBarOwner;
+import co.moonmonkeylabs.flowmortarexampleapp.common.flow.ActivityHelper;
 import co.moonmonkeylabs.flowmortarexampleapp.common.flow.Layout;
 import co.moonmonkeylabs.flowmortarexampleapp.common.mortarscreen.WithModule;
 import co.moonmonkeylabs.flowmortarexampleapp.view.MainView;
-import co.moonmonkeylabs.flowmortarexampleapp.wizard.WizardHelper;
 import flow.Flow;
-import flow.History;
 import flow.path.Path;
 import mortar.ViewPresenter;
 
@@ -38,11 +37,11 @@ public class MainScreen extends Path {
   @Singleton
   public static class Presenter extends ViewPresenter<MainView> {
 
-    private final Activity activity;
+    private final ActivityHelper activityHelper;
 
     @Inject
-    public Presenter(Activity activity) {
-      this.activity = activity;
+    public Presenter(ActivityHelper activityHelper) {
+      this.activityHelper = activityHelper;
     }
 
     @Override
@@ -68,9 +67,8 @@ public class MainScreen extends Path {
     }
 
     public void handleWizardScreenButtonClicked() {
-      if (activity instanceof FlowMortarExampleActivity) {
-        ((FlowMortarExampleActivity) activity).addWizardScope();
-      }
+      Activity activity = activityHelper.findActivity((ContextWrapper) getView().getContext());
+      ((FlowMortarExampleActivity) activity).addWizardScope();
 
       Flow.get(getView()).set(new Wizard1Screen());
     }

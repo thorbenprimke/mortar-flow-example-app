@@ -2,6 +2,7 @@ package co.moonmonkeylabs.flowmortarexampleapp.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 
@@ -22,6 +23,13 @@ public class MainView extends CustomLinearLayout<MainScreen.Presenter> {
   @Override
   public MainScreen.Presenter getPresenter() {
     return presenter;
+  }
+
+  @Override
+  protected void onAttachedToWindow() {
+    super.onAttachedToWindow();
+
+    ((TextView) findViewById(R.id.main_buttons_rotation_screen)).setText("hello with help");
   }
 
   @OnClick(R.id.main_buttons_rotation_screen)

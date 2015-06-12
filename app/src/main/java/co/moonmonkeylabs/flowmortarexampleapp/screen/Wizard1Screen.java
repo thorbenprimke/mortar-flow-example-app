@@ -1,6 +1,7 @@
 package co.moonmonkeylabs.flowmortarexampleapp.screen;
 
 import android.app.Activity;
+import android.content.ContextWrapper;
 import android.os.Bundle;
 
 import javax.inject.Inject;
@@ -9,6 +10,7 @@ import javax.inject.Singleton;
 import co.moonmonkeylabs.flowmortarexampleapp.FlowMortarExampleActivity;
 import co.moonmonkeylabs.flowmortarexampleapp.R;
 import co.moonmonkeylabs.flowmortarexampleapp.WizardModule;
+import co.moonmonkeylabs.flowmortarexampleapp.common.flow.ActivityHelper;
 import co.moonmonkeylabs.flowmortarexampleapp.common.flow.Layout;
 import co.moonmonkeylabs.flowmortarexampleapp.common.mortarscreen.WithModule;
 import co.moonmonkeylabs.flowmortarexampleapp.model.WizardState;
@@ -32,12 +34,12 @@ public class Wizard1Screen extends Path {
   public static class Presenter extends ViewPresenter<Wizard1View> {
 
     private final WizardState wizardState;
-    private final Activity activity;
+    private final ActivityHelper activityHelper;
 
     @Inject
-    public Presenter(WizardState wizardState, Activity activity) {
+    public Presenter(WizardState wizardState, ActivityHelper activityHelper) {
       this.wizardState = wizardState;
-      this.activity = activity;
+      this.activityHelper = activityHelper;
     }
 
     @Override
@@ -51,6 +53,7 @@ public class Wizard1Screen extends Path {
     }
 
     public void handleBackPressed() {
+      Activity activity = activityHelper.findActivity((ContextWrapper) getView().getContext());
       ((FlowMortarExampleActivity) activity).removeWizardScope();
     }
   }
