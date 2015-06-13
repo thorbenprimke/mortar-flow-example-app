@@ -28,8 +28,6 @@ public class MainView extends CustomLinearLayout<MainScreen.Presenter> {
   @Override
   protected void onAttachedToWindow() {
     super.onAttachedToWindow();
-
-    ((TextView) findViewById(R.id.main_buttons_rotation_screen)).setText("hello with help");
   }
 
   @OnClick(R.id.main_buttons_rotation_screen)
