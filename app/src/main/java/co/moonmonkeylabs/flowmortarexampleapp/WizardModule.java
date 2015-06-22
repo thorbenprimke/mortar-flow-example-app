@@ -22,17 +22,17 @@ import dagger.Provides;
 /**
  * Defines app-wide singletons
  */
-@Module(addsTo = ActivityModule.class, library = true)
+//@Module(addsTo = ActivityModule.class, library = true)
 public class WizardModule {
 
-  private final WizardState wizardState;
-
-  public WizardModule() {
-    wizardState = new WizardState();
-  }
-
-  @Provides
-  public WizardState providesWizardModule() {
-    return wizardState;
-  }
+//  private final WizardState wizardState;
+//
+//  public WizardModule() {
+//    wizardState = new WizardState();
+//  }
+//
+//  @Provides
+//  public WizardState providesWizardModule() {
+//    return wizardState;
+//  }
 }

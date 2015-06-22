@@ -16,10 +16,12 @@
 package co.moonmonkeylabs.flowmortarexampleapp;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import co.moonmonkeylabs.flowmortarexampleapp.common.actionbar.ActionBarOwner;
@@ -34,11 +36,10 @@ import flow.StateParceler;
  */
 @Module(
     includes = {
-        ActionBarOwner.ActionBarModule.class,
-        SettingsModule.class
-    },
-    injects = FlowMortarExampleActivity.class,
-    library = true)
+        SettingsModule.class,
+        ActionBarOwner.ActionBarModule.class
+    }
+)
 public class ApplicationModule {
 
   private final Application application;
@@ -48,19 +49,29 @@ public class ApplicationModule {
   }
 
   @Provides
-  public Application providesApplication() {
+  Context provideApplicationContext() {
+    return this.application;
+  }
+
+  @Provides
+  Application providesApplication() {
     return application;
   }
 
   @Provides
-  @Singleton
   Gson provideGson() {
     return new GsonBuilder().create();
   }
 
   @Provides
-  @Singleton
   StateParceler provideParcer(Gson gson) {
     return new GsonParceler(gson);
+  }
+
+  @Singleton
+  @Provides
+  @Named("someString")
+  String providesSomeString() {
+    return "someStringWithMore " + System.currentTimeMillis();
   }
 }

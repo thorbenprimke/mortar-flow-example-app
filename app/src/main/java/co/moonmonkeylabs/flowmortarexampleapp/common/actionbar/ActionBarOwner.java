@@ -103,9 +103,11 @@ public class ActionBarOwner extends Presenter<ActionBarOwner.Activity> {
     activity.setMenu(config.action);
   }
 
-  @Module(library = true)
+  @Module
   public static class ActionBarModule {
-    @Provides @Singleton ActionBarOwner provideActionBarOwner() {
+
+    @Provides
+    ActionBarOwner provideActionBarOwner() {
       return new ActionBarOwner();
     }
   }

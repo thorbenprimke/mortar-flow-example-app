@@ -14,7 +14,6 @@ import javax.inject.Singleton;
  * Tip to http://stackoverflow.com/questions/21927990/mortar-flow-with-third-party-libraries-hooked-to-activity-lifecycle/21959529?noredirect=1#21959529
  * on this one, mostly.
  */
-@Singleton
 public class LifecycleOwner implements ActivityLifecycleListener {
 
   private List<ActivityLifecycleListener> registeredListeners

@@ -1,26 +1,26 @@
 package co.moonmonkeylabs.flowmortarexampleapp.screen;
 
-import android.app.Activity;
-import android.content.ContextWrapper;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
+import javax.inject.Named;
 
-import co.moonmonkeylabs.flowmortarexampleapp.ActivityModule;
 import co.moonmonkeylabs.flowmortarexampleapp.FlowMortarExampleActivity;
 import co.moonmonkeylabs.flowmortarexampleapp.R;
-import co.moonmonkeylabs.flowmortarexampleapp.common.flow.ActivityHelper;
+import co.moonmonkeylabs.flowmortarexampleapp.common.actionbar.ActionBarOwner;
 import co.moonmonkeylabs.flowmortarexampleapp.common.flow.Layout;
-import co.moonmonkeylabs.flowmortarexampleapp.common.mortarscreen.WithModule;
+import co.moonmonkeylabs.flowmortarexampleapp.common.mortar.ScreenComponentFactory;
+import co.moonmonkeylabs.flowmortarexampleapp.common.setting.StringLocalSetting;
+import co.moonmonkeylabs.flowmortarexampleapp.di.PerScreen;
 import co.moonmonkeylabs.flowmortarexampleapp.view.MainView;
 import flow.Flow;
 import flow.path.Path;
 import mortar.ViewPresenter;
 
 @Layout(R.layout.main_layout)
-@WithModule(MainScreen.Module.class)
-public class MainScreen extends Path {
+public class MainScreen extends Path
+    implements ScreenComponentFactory<FlowMortarExampleActivity.Component> {
 
   @Override
   public boolean equals(Object o) {
@@ -30,23 +30,51 @@ public class MainScreen extends Path {
     return this.getClass().getSimpleName().equals(o.getClass().getSimpleName());
   }
 
-  @dagger.Module(injects = MainView.class, addsTo = ActivityModule.class)
-  public class Module {
+  @Override
+  public Object createComponent(FlowMortarExampleActivity.Component parent) {
+    return DaggerMainScreen_Component.builder()
+        .component(parent)
+        .build();
   }
 
-  @Singleton
+  @PerScreen
+  @dagger.Component(dependencies = FlowMortarExampleActivity.Component.class)
+  public interface Component {
+    void inject(MainView view);
+  }
+
   public static class Presenter extends ViewPresenter<MainView> {
 
-    private final ActivityHelper activityHelper;
+//    private final ActivityHelper activityHelper;
+    private String something;
+    private final StringLocalSetting userPreferredName;
+    private final ActionBarOwner actionBarOwner;
 
     @Inject
-    public Presenter(ActivityHelper activityHelper) {
-      this.activityHelper = activityHelper;
+    public Presenter(
+        @Named("someString") String something,
+        @Named("userPreferredName") StringLocalSetting userPreferredName,
+        ActionBarOwner actionBarOwner) {
+      this.userPreferredName = userPreferredName;
+      this.something = something;
+      this.actionBarOwner = actionBarOwner;
     }
 
     @Override
     protected void onLoad(Bundle savedInstanceState) {
       super.onLoad(savedInstanceState);
+
+      Toast.makeText(getView().getContext(), something, Toast.LENGTH_SHORT).show();
+
+      String s = userPreferredName.get();
+      if (s == null) {
+        s = "userPreferredName was null";
+      } else if (s.equals("")) {
+        s = "userPreferredName was empty";
+      }
+      Toast.makeText(getView().getContext(), s, Toast.LENGTH_SHORT).show();
+
+      userPreferredName.set("I'm set now");
     }
 
     @Override
@@ -59,18 +87,18 @@ public class MainScreen extends Path {
     }
 
     public void handlePhotoDisplayScreenButtonClicked() {
-      Flow.get(getView()).set(new PhotoDisplayScreen());
+//      Flow.get(getView()).set(new PhotoDisplayScreen());
     }
 
     public void handleSettingsScreenButtonClicked() {
-      Flow.get(getView()).set(new SettingScreen());
+//      Flow.get(getView()).set(new SettingScreen());
     }
 
     public void handleWizardScreenButtonClicked() {
-      Activity activity = activityHelper.findActivity((ContextWrapper) getView().getContext());
-      ((FlowMortarExampleActivity) activity).addWizardScope();
+//      Activity activity = activityHelper.findActivity((ContextWrapper) getView().getContext());
+//      ((FlowMortarExampleActivity) activity).addWizardScope();
 
-      Flow.get(getView()).set(new Wizard1Screen());
+//      Flow.get(getView()).set(new Wizard1Screen());
     }
   }
 }

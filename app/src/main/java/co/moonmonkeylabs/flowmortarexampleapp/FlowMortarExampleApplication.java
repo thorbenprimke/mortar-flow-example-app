@@ -17,24 +17,34 @@ package co.moonmonkeylabs.flowmortarexampleapp;
 
 import android.app.Application;
 
-import co.moonmonkeylabs.flowmortarexampleapp.common.dagger.ObjectGraphService;
-import dagger.ObjectGraph;
+import co.moonmonkeylabs.flowmortarexampleapp.common.dagger.DaggerService;
+import co.moonmonkeylabs.flowmortarexampleapp.di.component.ApplicationComponent;
+import co.moonmonkeylabs.flowmortarexampleapp.di.component.DaggerApplicationComponent;
+import co.moonmonkeylabs.flowmortarexampleapp.setting.SettingsModule;
 import mortar.MortarScope;
 
 public class FlowMortarExampleApplication extends Application {
-  private MortarScope rootScope;
 
-  @Override public Object getSystemService(String name) {
-    if (rootScope == null) {
-      rootScope = MortarScope.buildRootScope()
-          .withService(
-              ObjectGraphService.SERVICE_NAME,
-              ObjectGraph.create(new ApplicationModule(this)))
-          .build("Root");
-    }
+  private MortarScope mortarScope;
 
-    if (rootScope.hasService(name)) return rootScope.getService(name);
+  @Override
+  public Object getSystemService(String name) {
+    return mortarScope.hasService(name) ? mortarScope.getService(name) : super.getSystemService(name);
+  }
 
-    return super.getSystemService(name);
+  @Override
+  public void onCreate() {
+    super.onCreate();
+
+    ApplicationComponent component = DaggerApplicationComponent
+        .builder()
+        .applicationModule(new ApplicationModule(this))
+        .settingsModule(new SettingsModule())
+        .build();
+    component.inject(this);
+
+    mortarScope = MortarScope.buildRootScope()
+        .withService(DaggerService.SERVICE_NAME, component)
+        .build("Root");
   }
 }

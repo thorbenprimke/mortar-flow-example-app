@@ -23,7 +23,7 @@ import dagger.Provides;
 /**
  * Defines app-wide singletons
  */
-@Module(addsTo = ApplicationModule.class, library = true)
+//@Module(addsTo = ApplicationModule.class, library = true)
 public class ActivityModule {
 
   private final Activity activity;
@@ -32,8 +32,8 @@ public class ActivityModule {
     this.activity = activity;
   }
 
-  @Provides
-  public Activity providesActivity() {
-    return activity;
-  }
+//  @Provides
+//  public Activity providesActivity() {
+//    return activity;
+//  }
 }

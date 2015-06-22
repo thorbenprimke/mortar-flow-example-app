@@ -10,8 +10,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * Annotation for the user's preferred name setting.
  */
+@Qualifier
 @Documented
 @Retention(RUNTIME)
-@Qualifier
 public @interface UserPreferredName {
 }

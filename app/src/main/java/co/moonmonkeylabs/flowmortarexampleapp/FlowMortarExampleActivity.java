@@ -26,14 +26,18 @@ import android.view.MenuItem;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import co.moonmonkeylabs.flowmortarexampleapp.common.actionbar.ActionBarOwner;
-import co.moonmonkeylabs.flowmortarexampleapp.common.dagger.ObjectGraphService;
+import co.moonmonkeylabs.flowmortarexampleapp.common.dagger.DaggerService;
 import co.moonmonkeylabs.flowmortarexampleapp.common.flow.FlowHistoryDevHelper;
 import co.moonmonkeylabs.flowmortarexampleapp.common.flow.GsonParceler;
 import co.moonmonkeylabs.flowmortarexampleapp.common.flow.HandlesBack;
 import co.moonmonkeylabs.flowmortarexampleapp.common.lifecycle.LifecycleActivity;
 import co.moonmonkeylabs.flowmortarexampleapp.common.lifecycle.LifecycleOwner;
+import co.moonmonkeylabs.flowmortarexampleapp.common.setting.StringLocalSetting;
+import co.moonmonkeylabs.flowmortarexampleapp.di.PerActivity;
+import co.moonmonkeylabs.flowmortarexampleapp.di.component.ApplicationComponent;
 import co.moonmonkeylabs.flowmortarexampleapp.screen.MainScreen;
 import flow.Flow;
 import flow.FlowDelegate;
@@ -59,8 +63,8 @@ public class FlowMortarExampleActivity extends LifecycleActivity
 
   private ActionBarOwner.MenuAction actionBarMenuAction;
 
-  @Inject
-  ActionBarOwner actionBarOwner;
+//  @Inject
+//  ActionBarOwner actionBarOwner;
 
   @Inject
   LifecycleOwner lifecycleOwner;
@@ -83,8 +87,8 @@ public class FlowMortarExampleActivity extends LifecycleActivity
   public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
     Path newScreen = traversal.destination.top();
     String title = newScreen.getClass().getSimpleName();
-    actionBarOwner.setConfig(
-        new ActionBarOwner.Config(false, !(newScreen instanceof MainScreen), title, null));
+//    actionBarOwner.setConfig(
+//        new ActionBarOwner.Config(false, !(newScreen instanceof MainScreen), title, null));
 
     container.dispatch(traversal, callback);
   }
@@ -97,24 +101,40 @@ public class FlowMortarExampleActivity extends LifecycleActivity
     @SuppressWarnings("deprecation") FlowDelegate.NonConfigurationInstance nonConfig =
         (FlowDelegate.NonConfigurationInstance) getLastNonConfigurationInstance();
 
-    MortarScope parentScope = MortarScope.getScope(getApplication());
+//    MortarScope parentScope = MortarScope.getScope(getApplication());
+//
+//    String scopeName = getLocalClassName() + "-task-" + getTaskId();
+//
+//    activityScope = parentScope.findChild(scopeName);
+//    if (activityScope == null) {
+//      activityScope = parentScope.buildChild()
+//          .withService(BundleServiceRunner.SERVICE_NAME, new BundleServiceRunner())
+//          .withService(
+//              DaggerService.SERVICE_NAME,
+//              ObjectGraphService.create(parentScope, new ActivityModule(this)))
+//          .build(scopeName);
+//    }
+//    ObjectGraphService.inject(this, this);
+//
+//    getBundleServiceRunner(activityScope).onCreate(savedInstanceState);
+    activityScope = MortarScope.findChild(getApplicationContext(), getClass().getName());
 
-    String scopeName = getLocalClassName() + "-task-" + getTaskId();
-
-    activityScope = parentScope.findChild(scopeName);
     if (activityScope == null) {
-      activityScope = parentScope.buildChild()
+      Component component = DaggerFlowMortarExampleActivity_Component.builder()
+          .applicationComponent(DaggerService.<ApplicationComponent>getDaggerComponent(getApplicationContext()))
+          .build();
+
+      activityScope = MortarScope.buildChild(getApplicationContext())
           .withService(BundleServiceRunner.SERVICE_NAME, new BundleServiceRunner())
-          .withService(
-              ObjectGraphService.SERVICE_NAME,
-              ObjectGraphService.create(parentScope, new ActivityModule(this)))
-          .build(scopeName);
+          .withService(DaggerService.SERVICE_NAME, component)
+          .build(getClass().getName());
     }
-    ObjectGraphService.inject(this, this);
 
-    getBundleServiceRunner(activityScope).onCreate(savedInstanceState);
+    DaggerService.<Component>getDaggerComponent(this).inject(this);
 
-    actionBarOwner.takeView(this);
+    BundleServiceRunner.getBundleServiceRunner(this).onCreate(savedInstanceState);
+
+//    actionBarOwner.takeView(this);
 
     setContentView(R.layout.root_layout);
     container = (PathContainerView) findViewById(R.id.container);
@@ -136,11 +156,11 @@ public class FlowMortarExampleActivity extends LifecycleActivity
       return;
     }
 
-    wizardScope = activityScope.buildChild()
-        .withService(
-            ObjectGraphService.SERVICE_NAME,
-            ObjectGraphService.create(activityScope, new WizardModule()))
-        .build("WizardScope");
+//    wizardScope = activityScope.buildChild()
+//        .withService(
+//            ObjectGraphService.SERVICE_NAME,
+//            ObjectGraphService.create(activityScope, new WizardModule()))
+//        .build("WizardScope");
   }
 
   public void removeWizardScope() {
@@ -257,8 +277,8 @@ public class FlowMortarExampleActivity extends LifecycleActivity
 
   @Override
   protected void onDestroy() {
-    actionBarOwner.dropView(this);
-    actionBarOwner.setConfig(null);
+//    actionBarOwner.dropView(this);
+//    actionBarOwner.setConfig(null);
 
     // activityScope may be null in case isWrongInstance() returned true in onCreate()
     if (isFinishing() && activityScope != null) {
@@ -293,5 +313,17 @@ public class FlowMortarExampleActivity extends LifecycleActivity
       actionBarMenuAction = action;
       invalidateOptionsMenu();
     }
+  }
+
+  @PerActivity
+  @dagger.Component(dependencies = ApplicationComponent.class)
+  public interface Component extends ApplicationComponent {
+    void inject(FlowMortarExampleActivity activity);
+
+//    @Named("someString") String someString();
+//
+//    @Named("userPreferredName") StringLocalSetting userPreferredName();
+//
+//    ActionBarOwner provideActionBarOwner();
   }
 }

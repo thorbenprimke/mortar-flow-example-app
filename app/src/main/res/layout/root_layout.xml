@@ -15,7 +15,7 @@
   ~ limitations under the License.
   -->
 
-<co.moonmonkeylabs.flowmortarexampleapp.common.flowmortar.MortarScreenSwitcherFrame
+<co.moonmonkeylabs.flowmortarexampleapp.common.mortar.MortarPathContainerView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/container"
     android:layout_width="match_parent"
