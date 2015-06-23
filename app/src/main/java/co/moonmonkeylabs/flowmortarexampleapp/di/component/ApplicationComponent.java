@@ -5,6 +5,7 @@ import javax.inject.Singleton;
 import co.moonmonkeylabs.flowmortarexampleapp.ApplicationModule;
 import co.moonmonkeylabs.flowmortarexampleapp.FlowMortarExampleApplication;
 import co.moonmonkeylabs.flowmortarexampleapp.common.actionbar.ActionBarOwner;
+import co.moonmonkeylabs.flowmortarexampleapp.common.lifecycle.LifecycleOwner;
 import co.moonmonkeylabs.flowmortarexampleapp.common.setting.StringLocalSetting;
 import co.moonmonkeylabs.flowmortarexampleapp.setting.UserPreferredName;
 import dagger.Component;
@@ -21,4 +22,6 @@ public interface ApplicationComponent {
   @UserPreferredName StringLocalSetting userPreferredName2();
 
   ActionBarOwner provideActionBarOwner();
+
+  LifecycleOwner lifecycleOwner();
 }

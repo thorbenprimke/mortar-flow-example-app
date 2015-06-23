@@ -80,7 +80,7 @@ public class MainScreen extends Path
     }
 
     public void handlePhotoDisplayScreenButtonClicked() {
-//      Flow.get(getView()).set(new PhotoDisplayScreen());
+      Flow.get(getView()).set(new PhotoDisplayScreen());
     }
 
     public void handleSettingsScreenButtonClicked() {

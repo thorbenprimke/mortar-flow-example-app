@@ -26,6 +26,7 @@ import javax.inject.Singleton;
 
 import co.moonmonkeylabs.flowmortarexampleapp.common.actionbar.ActionBarOwner;
 import co.moonmonkeylabs.flowmortarexampleapp.common.flow.GsonParceler;
+import co.moonmonkeylabs.flowmortarexampleapp.common.lifecycle.LifecycleOwner;
 import co.moonmonkeylabs.flowmortarexampleapp.setting.SettingsModule;
 import dagger.Module;
 import dagger.Provides;
@@ -73,5 +74,11 @@ public class ApplicationModule {
   @Named("someString")
   String providesSomeString() {
     return "someStringWithMore " + System.currentTimeMillis();
+  }
+
+  @Singleton
+  @Provides
+  LifecycleOwner providesLifecycleOwner() {
+    return new LifecycleOwner();
   }
 }

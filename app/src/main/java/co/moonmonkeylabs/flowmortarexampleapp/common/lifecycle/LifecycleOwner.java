@@ -19,7 +19,6 @@ public class LifecycleOwner implements ActivityLifecycleListener {
   private List<ActivityLifecycleListener> registeredListeners
       = new ArrayList<>();
 
-  @Inject
   public LifecycleOwner() {
   }
 
