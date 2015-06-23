@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import co.moonmonkeylabs.flowmortarexampleapp.FlowMortarExampleActivity;
 import co.moonmonkeylabs.flowmortarexampleapp.R;
@@ -13,6 +12,7 @@ import co.moonmonkeylabs.flowmortarexampleapp.common.flow.Layout;
 import co.moonmonkeylabs.flowmortarexampleapp.common.mortar.ScreenComponentFactory;
 import co.moonmonkeylabs.flowmortarexampleapp.common.setting.StringLocalSetting;
 import co.moonmonkeylabs.flowmortarexampleapp.di.PerScreen;
+import co.moonmonkeylabs.flowmortarexampleapp.setting.UserPreferredName;
 import co.moonmonkeylabs.flowmortarexampleapp.view.MainView;
 import flow.Flow;
 import flow.path.Path;
@@ -46,25 +46,20 @@ public class MainScreen extends Path
   public static class Presenter extends ViewPresenter<MainView> {
 
 //    private final ActivityHelper activityHelper;
-    private String something;
     private final StringLocalSetting userPreferredName;
     private final ActionBarOwner actionBarOwner;
 
     @Inject
     public Presenter(
-        @Named("someString") String something,
-        @Named("userPreferredName") StringLocalSetting userPreferredName,
+        @UserPreferredName StringLocalSetting userPreferredName,
         ActionBarOwner actionBarOwner) {
       this.userPreferredName = userPreferredName;
-      this.something = something;
       this.actionBarOwner = actionBarOwner;
     }
 
     @Override
     protected void onLoad(Bundle savedInstanceState) {
       super.onLoad(savedInstanceState);
-
-      Toast.makeText(getView().getContext(), something, Toast.LENGTH_SHORT).show();
 
       String s = userPreferredName.get();
       if (s == null) {
@@ -73,9 +68,7 @@ public class MainScreen extends Path
         s = "userPreferredName was empty";
       }
       Toast.makeText(getView().getContext(), s, Toast.LENGTH_SHORT).show();
-
-      userPreferredName.set("I'm set now");
-    }
+   }
 
     @Override
     protected void onSave(Bundle outState) {
@@ -91,7 +84,7 @@ public class MainScreen extends Path
     }
 
     public void handleSettingsScreenButtonClicked() {
-//      Flow.get(getView()).set(new SettingScreen());
+      Flow.get(getView()).set(new SettingScreen());
     }
 
     public void handleWizardScreenButtonClicked() {

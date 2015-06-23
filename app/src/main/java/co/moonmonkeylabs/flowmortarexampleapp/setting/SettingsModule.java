@@ -19,8 +19,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 
 import co.moonmonkeylabs.flowmortarexampleapp.common.setting.StringLocalSetting;
@@ -42,15 +40,8 @@ public class SettingsModule {
   }
 
   @Provides
-  @Singleton
-  @Named("userPreferredName")
+  @UserPreferredName
   StringLocalSetting providesUserPreferredName(SharedPreferences preferences) {
     return new StringLocalSetting(preferences, "userPreferredName");
-  }
-
-  @Provides
-  @Named("brokenSettings")
-  StringLocalSetting providesSomeLocalSetting() {
-    return new StringLocalSetting(null, "sdom");
   }
 }
