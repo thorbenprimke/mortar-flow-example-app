@@ -10,13 +10,14 @@ import co.moonmonkeylabs.flowmortarexampleapp.common.setting.StringLocalSetting;
 import co.moonmonkeylabs.flowmortarexampleapp.setting.UserPreferredName;
 import dagger.Component;
 
-/**
- * Created by thorben on 6/17/15.
- */
 @Singleton
 @Component(
-    modules = {ApplicationModule.class })
+    modules = {
+        ApplicationModule.class
+    }
+)
 public interface ApplicationComponent {
+
   void inject(FlowMortarExampleApplication flowMortarExampleApplication);
 
   @UserPreferredName StringLocalSetting userPreferredName2();

@@ -27,7 +27,11 @@ public class SettingScreen extends Path
   }
 
   @PerScreen
-  @dagger.Component(dependencies = FlowMortarExampleActivity.Component.class)
+  @dagger.Component(
+      dependencies = {
+          FlowMortarExampleActivity.Component.class
+      }
+  )
   public interface Component {
     void inject(SettingView view);
   }

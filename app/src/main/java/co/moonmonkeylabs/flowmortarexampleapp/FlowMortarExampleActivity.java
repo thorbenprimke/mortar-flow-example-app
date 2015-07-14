@@ -38,6 +38,8 @@ import co.moonmonkeylabs.flowmortarexampleapp.common.lifecycle.LifecycleOwner;
 import co.moonmonkeylabs.flowmortarexampleapp.common.setting.StringLocalSetting;
 import co.moonmonkeylabs.flowmortarexampleapp.di.PerActivity;
 import co.moonmonkeylabs.flowmortarexampleapp.di.component.ApplicationComponent;
+import co.moonmonkeylabs.flowmortarexampleapp.di.component.DaggerWizardComponent;
+import co.moonmonkeylabs.flowmortarexampleapp.di.component.WizardComponent;
 import co.moonmonkeylabs.flowmortarexampleapp.screen.MainScreen;
 import flow.Flow;
 import flow.FlowDelegate;
@@ -156,11 +158,20 @@ public class FlowMortarExampleActivity extends LifecycleActivity
       return;
     }
 
+    WizardComponent wizardComponent = DaggerWizardComponent
+        .builder()
+        .component(DaggerService.<Component>getDaggerComponent(getContext()))
+        .build();
+
+    wizardScope = activityScope.buildChild()
+        .withService(DaggerService.SERVICE_NAME, wizardComponent)
+        .build("WizardScope");
+
 //    wizardScope = activityScope.buildChild()
 //        .withService(
 //            ObjectGraphService.SERVICE_NAME,
 //            ObjectGraphService.create(activityScope, new WizardModule()))
-//        .build("WizardScope");
+//        .wizardComponent("WizardScope");
   }
 
   public void removeWizardScope() {
@@ -319,11 +330,5 @@ public class FlowMortarExampleActivity extends LifecycleActivity
   @dagger.Component(dependencies = ApplicationComponent.class)
   public interface Component extends ApplicationComponent {
     void inject(FlowMortarExampleActivity activity);
-
-//    @Named("someString") String someString();
-//
-//    @Named("userPreferredName") StringLocalSetting userPreferredName();
-//
-//    ActionBarOwner provideActionBarOwner();
   }
 }

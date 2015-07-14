@@ -1,5 +1,7 @@
 package co.moonmonkeylabs.flowmortarexampleapp.screen;
 
+import android.app.Activity;
+import android.content.ContextWrapper;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -8,6 +10,7 @@ import javax.inject.Inject;
 import co.moonmonkeylabs.flowmortarexampleapp.FlowMortarExampleActivity;
 import co.moonmonkeylabs.flowmortarexampleapp.R;
 import co.moonmonkeylabs.flowmortarexampleapp.common.actionbar.ActionBarOwner;
+import co.moonmonkeylabs.flowmortarexampleapp.common.flow.ActivityHelper;
 import co.moonmonkeylabs.flowmortarexampleapp.common.flow.Layout;
 import co.moonmonkeylabs.flowmortarexampleapp.common.mortar.ScreenComponentFactory;
 import co.moonmonkeylabs.flowmortarexampleapp.common.setting.StringLocalSetting;
@@ -45,14 +48,16 @@ public class MainScreen extends Path
 
   public static class Presenter extends ViewPresenter<MainView> {
 
-//    private final ActivityHelper activityHelper;
+    private final ActivityHelper activityHelper;
     private final StringLocalSetting userPreferredName;
     private final ActionBarOwner actionBarOwner;
 
     @Inject
     public Presenter(
+        ActivityHelper activityHelper,
         @UserPreferredName StringLocalSetting userPreferredName,
         ActionBarOwner actionBarOwner) {
+      this.activityHelper = activityHelper;
       this.userPreferredName = userPreferredName;
       this.actionBarOwner = actionBarOwner;
     }
@@ -88,10 +93,10 @@ public class MainScreen extends Path
     }
 
     public void handleWizardScreenButtonClicked() {
-//      Activity activity = activityHelper.findActivity((ContextWrapper) getView().getContext());
-//      ((FlowMortarExampleActivity) activity).addWizardScope();
+      Activity activity = activityHelper.findActivity((ContextWrapper) getView().getContext());
+      ((FlowMortarExampleActivity) activity).addWizardScope();
 
-//      Flow.get(getView()).set(new Wizard1Screen());
+      Flow.get(getView()).set(new Wizard1Screen());
     }
   }
 }
