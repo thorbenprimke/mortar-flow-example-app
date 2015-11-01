@@ -99,7 +99,7 @@ public class FlowMortarExampleActivity extends LifecycleActivity
 
     MortarScope parentScope = MortarScope.getScope(getApplication());
 
-    String scopeName = getLocalClassName() + "-task-" + getTaskId();
+    String scopeName = getLocalClassName() + "-task-" + getTaskId() + "-" + hashCode();
 
     activityScope = parentScope.findChild(scopeName);
     if (activityScope == null) {
